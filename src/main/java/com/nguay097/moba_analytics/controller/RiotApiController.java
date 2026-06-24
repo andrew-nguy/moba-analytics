@@ -1,6 +1,7 @@
 package com.nguay097.moba_analytics.controller;
 
 import com.nguay097.moba_analytics.dto.AccountDto;
+import com.nguay097.moba_analytics.dto.LeagueEntryDto;
 import com.nguay097.moba_analytics.dto.MatchDto;
 import com.nguay097.moba_analytics.dto.SummonerDto;
 import com.nguay097.moba_analytics.service.RiotApiService;
@@ -60,5 +61,13 @@ public class RiotApiController {
             @RequestParam String platform
     ) {
         return riotApiService.getMatchById(matchId, platform);
+    }
+
+    @GetMapping("/ranked")
+    public LeagueEntryDto[] getRanked(
+            @RequestParam String puuid,
+            @RequestParam String platform
+    ) {
+        return riotApiService.getRankedByPuuid(puuid, platform);
     }
 }

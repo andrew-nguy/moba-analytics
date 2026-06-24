@@ -1,6 +1,7 @@
 package com.nguay097.moba_analytics.client;
 
 import com.nguay097.moba_analytics.dto.AccountDto;
+import com.nguay097.moba_analytics.dto.LeagueEntryDto;
 import com.nguay097.moba_analytics.dto.MatchDto;
 import com.nguay097.moba_analytics.dto.SummonerDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +38,11 @@ public class RiotApiClient {
     public MatchDto getMatchById(String matchId, String region) {
         String url = "https://" + region + ".api.riotgames.com/lol/match/v5/matches/" + matchId;
         return get(url, MatchDto.class);
+    }
+
+    public LeagueEntryDto[] getRankedByPuuid(String puuid, String platform) {
+        String url = "https://" + platform + ".api.riotgames.com/lol/league/v4/entries/by-puuid/" + puuid;
+        return get(url, LeagueEntryDto[].class);
     }
 
     private <T> T get(String url, Class<T> responseType) {
