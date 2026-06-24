@@ -1,6 +1,7 @@
 package com.nguay097.moba_analytics.controller;
 
 import com.nguay097.moba_analytics.dto.AccountDto;
+import com.nguay097.moba_analytics.dto.SummonerDto;
 import com.nguay097.moba_analytics.service.RiotApiService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,17 @@ public class RiotApiController {
         return riotApiService.getAccountsByRiotId(
                 name,
                 tagLine,
+                platform
+        );
+    }
+
+    @GetMapping("/summoner")
+    public SummonerDto getSummoner(
+            @RequestParam String puuid,
+            @RequestParam String platform
+    ) {
+        return riotApiService.getSummonerByPuuid(
+                puuid,
                 platform
         );
     }

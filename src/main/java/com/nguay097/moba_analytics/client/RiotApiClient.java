@@ -1,6 +1,7 @@
 package com.nguay097.moba_analytics.client;
 
 import com.nguay097.moba_analytics.dto.AccountDto;
+import com.nguay097.moba_analytics.dto.SummonerDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,6 +21,11 @@ public class RiotApiClient {
     public AccountDto getAccountByRiotId(String name, String tagLine, String region) {
         String url = "https://" + region + ".api.riotgames.com/riot/account/v1/accounts/by-riot-id/" + name + "/" + tagLine;
         return get(url, AccountDto.class);
+    }
+
+    public SummonerDto getSummonerByPuuid(String puuid, String platform) {
+        String url = "https://" + platform + ".api.riotgames.com/lol/summoner/v4/summoners/by-puuid/" + puuid;
+        return get(url, SummonerDto.class);
     }
 
     private <T> T get(String url, Class<T> responseType) {
