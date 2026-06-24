@@ -41,4 +41,15 @@ public class RiotApiController {
                 platform
         );
     }
+
+    @GetMapping("/matches")
+    public String[] getMatchIds(
+            @RequestParam String puuid,
+            @RequestParam String platform
+    ) {
+        return riotApiService.getMatchIdsByPuuid(
+                puuid,
+                platform
+        );
+    }
 }

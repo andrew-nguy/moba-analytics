@@ -26,12 +26,31 @@ public class RiotApiService {
             Map.entry("oc1", "asia")
     );
 
+    private static final Map<String, String> PLATFORM_TO_MATCH_REGION = Map.ofEntries(
+            Map.entry("na1", "americas"),
+            Map.entry("br1", "americas"),
+            Map.entry("la1", "americas"),
+            Map.entry("la2", "americas"),
+            Map.entry("euw1", "europe"),
+            Map.entry("eun1", "europe"),
+            Map.entry("tr1", "europe"),
+            Map.entry("ru", "europe"),
+            Map.entry("kr", "asia"),
+            Map.entry("jp1", "asia"),
+            Map.entry("oc1", "sea")
+    );
+
     public RiotApiService(RiotApiClient riotApiClient) {
         this.riotApiClient = riotApiClient;
     }
 
     private String getRegion(String platform) {
         return PLATFORM_TO_REGION.getOrDefault(platform.toLowerCase(), "americas");
+    }
+
+    // MATCH-V5 endpoint relates OC1 -> SEA whereas other endpoints sometimes do 0C1 -> ASIA
+    private String getMatchRegion(String platform) {
+        return PLATFORM_TO_MATCH_REGION.getOrDefault(platform.toLowerCase(), "americas");
     }
 
     public AccountDto getAccountsByRiotId(String name, String tagLine, String platform) {
@@ -41,5 +60,10 @@ public class RiotApiService {
 
     public SummonerDto getSummonerByPuuid(String puuid, String platform) {
         return riotApiClient.getSummonerByPuuid(puuid, platform);
+    }
+
+    public String[] getMatchIdsByPuuid(String puuid, String platform) {
+        String region = getMatchRegion(platform);
+        return riotApiClient.getMatchIdsByPuuid(puuid, region);
     }
 }

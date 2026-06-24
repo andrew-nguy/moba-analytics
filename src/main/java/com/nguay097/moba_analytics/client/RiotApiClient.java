@@ -28,6 +28,11 @@ public class RiotApiClient {
         return get(url, SummonerDto.class);
     }
 
+    public String[] getMatchIdsByPuuid(String puuid, String region) {
+        String url = "https://" + region + ".api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids";
+        return get(url, String[].class);
+    }
+
     private <T> T get(String url, Class<T> responseType) {
         return webClient.get()
                 .uri(url)
