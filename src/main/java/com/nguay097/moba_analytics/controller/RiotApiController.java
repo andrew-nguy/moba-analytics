@@ -1,6 +1,7 @@
 package com.nguay097.moba_analytics.controller;
 
 import com.nguay097.moba_analytics.dto.AccountDto;
+import com.nguay097.moba_analytics.dto.MatchDto;
 import com.nguay097.moba_analytics.dto.SummonerDto;
 import com.nguay097.moba_analytics.service.RiotApiService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,5 +52,13 @@ public class RiotApiController {
                 puuid,
                 platform
         );
+    }
+
+    @GetMapping("/match")
+    public MatchDto getMatch(
+            @RequestParam String matchId,
+            @RequestParam String platform
+    ) {
+        return riotApiService.getMatchById(matchId, platform);
     }
 }

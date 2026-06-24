@@ -2,6 +2,7 @@ package com.nguay097.moba_analytics.service;
 
 import com.nguay097.moba_analytics.client.RiotApiClient;
 import com.nguay097.moba_analytics.dto.AccountDto;
+import com.nguay097.moba_analytics.dto.MatchDto;
 import com.nguay097.moba_analytics.dto.SummonerDto;
 import org.springframework.stereotype.Service;
 
@@ -65,5 +66,10 @@ public class RiotApiService {
     public String[] getMatchIdsByPuuid(String puuid, String platform) {
         String region = getMatchRegion(platform);
         return riotApiClient.getMatchIdsByPuuid(puuid, region);
+    }
+
+    public MatchDto getMatchById(String matchId, String platform) {
+        String region = getMatchRegion(platform);
+        return riotApiClient.getMatchById(matchId, region);
     }
 }
