@@ -4,9 +4,11 @@ import com.nguay097.moba_analytics.dto.AccountDto;
 import com.nguay097.moba_analytics.dto.LeagueEntryDto;
 import com.nguay097.moba_analytics.dto.MatchDto;
 import com.nguay097.moba_analytics.dto.SummonerDto;
+import com.nguay097.moba_analytics.exception.RiotApiException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 /**
  * HTTP client layer for communicating with the Riot Games API.
@@ -97,17 +99,28 @@ public class RiotApiClient {
     /**
      * Generic method to execute GET requests to the Riot API and deserialize responses.
      *
+     * Catches WebClient exceptions and converts them to RiotApiException with the appropriate
+     * HTTP status code from the Riot API response.
+     *
      * @param <T> the type of the response object
      * @param url the full URL to the API endpoint
      * @param responseType the class type to deserialize the response into
      * @return an instance of the specified response type containing the API response data
+     * @throws RiotApiException if the Riot API returns an error status code
      */
     private <T> T get(String url, Class<T> responseType) {
-        return webClient.get()
-                .uri(url)
-                .header("X-Riot-Token", apiKey)
-                .retrieve()
-                .bodyToMono(responseType)
-                .block();
+        try {
+            return webClient.get()
+                    .uri(url)
+                    .header("X-Riot-Token", apiKey)
+                    .retrieve()
+                    .bodyToMono(responseType)
+                    .block();
+        } catch (WebClientResponseException ex) {
+            throw new RiotApiException(
+                    ex.getStatusCode().value(),
+                    "Riot API error: " + ex.getStatusCode() + " - " + ex.getStatusText()
+            );
+        }
     }
 }
