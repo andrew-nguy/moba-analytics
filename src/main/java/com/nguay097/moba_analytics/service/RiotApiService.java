@@ -5,6 +5,7 @@ import com.nguay097.moba_analytics.dto.AccountDto;
 import com.nguay097.moba_analytics.dto.LeagueEntryDto;
 import com.nguay097.moba_analytics.dto.MatchDto;
 import com.nguay097.moba_analytics.dto.SummonerDto;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -91,6 +92,7 @@ public class RiotApiService {
      * @param platform the platform code (e.g., "na1", "euw1", "kr")
      * @return an AccountDto containing the account information
      */
+    @Cacheable(value = "accounts", key = "#name + ':' + #tagLine + ':' + #platform")
     public AccountDto getAccountsByRiotId(String name, String tagLine, String platform) {
         String region = getRegion(platform);
         return riotApiClient.getAccountByRiotId(name, tagLine, region);
@@ -103,6 +105,7 @@ public class RiotApiService {
      * @param platform the platform code (e.g., "na1", "euw1", "kr")
      * @return a SummonerDto containing the summoner's game information
      */
+    @Cacheable(value = "summoners", key = "#puuid + ':' + #platform")
     public SummonerDto getSummonerByPuuid(String puuid, String platform) {
         return riotApiClient.getSummonerByPuuid(puuid, platform);
     }
@@ -114,6 +117,7 @@ public class RiotApiService {
      * @param platform the platform code (e.g., "na1", "euw1", "kr")
      * @return an array of match IDs as strings
      */
+    @Cacheable(value = "matches", key = "#puuid + ':' + #platform")
     public String[] getMatchIdsByPuuid(String puuid, String platform) {
         String region = getMatchRegion(platform);
         return riotApiClient.getMatchIdsByPuuid(puuid, region);
@@ -126,6 +130,7 @@ public class RiotApiService {
      * @param platform the platform code (e.g., "na1", "euw1", "kr")
      * @return a MatchDto containing complete match details and player statistics
      */
+    @Cacheable(value = "match", key = "#matchId")
     public MatchDto getMatchById(String matchId, String platform) {
         String region = getMatchRegion(platform);
         return riotApiClient.getMatchById(matchId, region);
@@ -138,6 +143,8 @@ public class RiotApiService {
      * @param platform the platform code (e.g., "na1", "euw1", "kr")
      * @return an array of LeagueEntryDto containing the player's ranked information for each queue
      */
+
+    @Cacheable(value = "ranked", key = "#puuid + ':' + #platform")
     public LeagueEntryDto[] getRankedByPuuid(String puuid, String platform) {
         return riotApiClient.getRankedByPuuid(puuid, platform);
     }
