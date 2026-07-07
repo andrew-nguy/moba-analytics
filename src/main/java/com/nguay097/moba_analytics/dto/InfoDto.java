@@ -5,5 +5,6 @@ import java.util.List;
 public record InfoDto(
         long gameDuration,
         String gameMode,
+        int queueId,
         List<ParticipantDto> participants
 ) {}
